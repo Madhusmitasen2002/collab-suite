@@ -6,11 +6,20 @@ import authRoutes from './routes/auth.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5713';
+const allowedOrigins = [
+  "http://localhost:5173",          // Vite dev server
+  "https://collab-suite.vercel.app" // deployed frontend
+];
 
 app.use(cors({
-  origin: CLIENT_URL,
-  credentials: true,   
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed for: " + origin));
+    }
+  },
+  credentials: true,
 }));
 
 app.use(express.json());

@@ -38,11 +38,13 @@ export default function Login() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-200 via-white to-blue-200">
-      <div
-        className="w-full max-w-md bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-8 
-                   transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
-      >
+    <div className="fixed inset-0 flex items-center justify-center min-h-screen 
+                bg-gradient-to-br from-indigo-200 via-white to-blue-200 p-4">
+  <div className="w-full max-w-sm sm:max-w-md bg-white/90 backdrop-blur-lg 
+                  rounded-2xl shadow-xl p-6 sm:p-8 
+                  transform transition-all duration-300 
+                  hover:scale-[1.02] hover:shadow-2xl">
+
         {/* Title */}
         <h2 className="text-3xl font-bold text-center text-indigo-700">
           Remote Work Suite
