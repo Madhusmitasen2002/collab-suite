@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "react-toastify";
+import API_BASE_URL from "../config";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -9,34 +10,34 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setFormError("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError("");
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // keep this to allow cookie
+      body: JSON.stringify({ name, email, password }),
+    });
 
-    try {
-      const res = await fetch("https://collab-suite.onrender.com/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-        credentials: "include", // ✅ prepare for cookie auth
-      });
+    const data = await res.json();
 
-      const data = await res.json();
-
-      if (!res.ok || data.error) {
-        setFormError(data.error || "Signup failed");
-        toast.error(data.error || "Signup failed");
-        return;
-      }
-
-      toast.success("✅ Registration successful");
-      navigate("/dashboard");
-    } catch (err) {
-      setFormError(err.message || "Signup failed");
-      toast.error(err.message || "Signup failed");
+    if (!res.ok || data.error) {
+      setFormError(data.error || "Signup failed");
+      toast.error(data.error || "Signup failed");
+      return;
     }
-  };
+
+    // Cookie already set by server; proceed to dashboard
+    toast.success("✅ Registration successful");
+    navigate("/workspace");
+  } catch (err) {
+    setFormError(err.message || "Signup failed");
+    toast.error(err.message || "Signup failed");
+  }
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center min-h-screen 
