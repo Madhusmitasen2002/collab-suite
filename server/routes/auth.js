@@ -75,13 +75,13 @@ router.post("/login", async (req, res) => {
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
     const token = createToken({ id: user.id });
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: JWT_EXPIRES_MS,
-    };
+    const isProd = process.env.NODE_ENV === "production" || process.env.RENDER; // add this
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "None" : "Lax",
+  maxAge: JWT_EXPIRES_MS,
+};
 
     res.cookie("token", token, cookieOptions);
 

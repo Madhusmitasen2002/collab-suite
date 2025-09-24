@@ -14,17 +14,12 @@ const allowedOrigins = [
   "https://collab-suite.vercel.app",  // your deployed frontend
   // add other origins if needed
 ];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman / server-to-server)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed for: " + origin));
-    }
-  },
-  credentials: true // <-- IMPORTANT, allow cookies to be sent/received
+  origin: [
+    "http://localhost:5173",
+    "https://collab-suite.vercel.app"
+  ],
+  credentials: true
 }));
 
 app.use(cookieParser());

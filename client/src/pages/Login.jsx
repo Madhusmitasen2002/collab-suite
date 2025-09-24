@@ -14,13 +14,12 @@ export default function Login() {
     setFormError("");
 
     try {
-      const res = await fetch("https://collab-suite.onrender.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include", // ✅ using cookies
-      });
-
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include",
+  body: JSON.stringify({ email, password }),
+});
       const data = await res.json();
 
       if (!res.ok || data.error) {
