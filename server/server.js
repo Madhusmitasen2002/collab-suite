@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "http://localhost:5173",
   "https://collab-suite.vercel.app",
-  "https://collab-suite-4ek412jef-madhusmita-sen-s-projects.vercel.app", // your actual deploy
+  "https://collab-suite-4ek412jef-madhusmita-sen-s-projects.vercel.app",
+  "https://collab-suite-weld.vercel.app", // your actual deploy
 ];
 
 app.use(cors({
