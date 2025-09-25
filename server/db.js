@@ -8,10 +8,9 @@ console.log("Connecting to DB with URL:", process.env.DATABASE_URL);
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    require: true, // Ensure SSL is required
-    rejectUnauthorized: false, // Accept Supabase’s self-signed cert
+    require: true,
+    rejectUnauthorized: false,
   },
-  host: "db.zwyafaukgvnretgglykx.supabase.co", // Force correct DNS resolution
 });
 
 export default pool;
