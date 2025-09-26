@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.js"; // adjust path if needed
+import authRoutes from "./routes/auth.js"; 
+import workspaceRoutes from "./routes/workspace.js";
 
 dotenv.config();
 console.log("Loaded DATABASE_URL:", process.env.DATABASE_URL);
@@ -41,6 +42,7 @@ app.use((err, req, res, next) => {
   console.error("Unhandled server error:", err.stack || err);
   res.status(500).json({ error: "Server error" });
 });
+app.use("/workspace", workspaceRoutes);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);

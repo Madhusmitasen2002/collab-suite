@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import DashboardLayout from "./components/DashboardLayout";
+import Workspace from "./pages/Workspace";
 
 function App() {
   return (
@@ -9,9 +11,19 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/workspace" element={<h1>Workspace 🚀</h1>} />
+
+        {/* Wrap workspace inside Dashboard layout */}
+        <Route
+          path="/workspace"
+          element={
+            <DashboardLayout>
+              <Workspace />
+            </DashboardLayout>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
 }
+
 export default App;
