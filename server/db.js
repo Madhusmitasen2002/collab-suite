@@ -1,3 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 dotenv.config();
 import pkg from "pg";
@@ -14,3 +15,7 @@ const pool = new Pool({
 });
 
 export default pool;
+export const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+)

@@ -92,6 +92,16 @@ const cookieOptions = {
     res.status(500).json({ error: err.message });
   }
 });
+// Logout
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" || process.env.RENDER,
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  });
+  res.json({ message: "Logged out successfully" });
+});
+
 router.get("/testdb", async (req, res) => {
   try {
     const now = await pool.query("SELECT NOW()");

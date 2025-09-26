@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import DashboardLayout from "./components/DashboardLayout";
+import DashboardLayout from "./components/DahboardLayout";
 import Workspace from "./pages/Workspace";
 
 function App() {
@@ -11,16 +11,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+<Route path="/workspace" element={<DashboardLayout />}>
+  <Route index element={<Workspace />} />
+</Route>
 
-        {/* Wrap workspace inside Dashboard layout */}
-        <Route
-          path="/workspace"
-          element={
-            <DashboardLayout>
-              <Workspace />
-            </DashboardLayout>
-          }
-        />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../api"; // axios instance
 
 export default function Dashboard() {
   const [workspaces, setWorkspaces] = useState([]);
