@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.js"; 
 import workspaceRoutes from "./routes/workspace.js";
+import taskRoutes from "./routes/tasks.js";
 
 dotenv.config();
 console.log("Loaded DATABASE_URL:", process.env.DATABASE_URL);
@@ -43,6 +44,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Server error" });
 });
 app.use("/workspace", workspaceRoutes);
+app.use("/tasks", taskRoutes);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
