@@ -8,12 +8,13 @@ import authRoutes from "./routes/auth.js";
 import workspaceRoutes from "./routes/workspace.js";
 import taskRoutes from "./routes/tasks.js";
 
-// Initialize environment variables
+// Load environment variables
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ CORS Allowed Origins
+// ✅ Allowed Origins for CORS
 const allowedOrigins = [
   "http://localhost:5173",
   "https://collab-suite.vercel.app",
@@ -21,51 +22,40 @@ const allowedOrigins = [
   "https://collab-suite-weld.vercel.app"
 ];
 
-// ✅ CORS Middleware (allow cookies & dynamic origin)
-app.use(cors({
+// ✅ CORS Configuration
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // allow
+      callback(null, true); // allow request
     } else {
-      callback(new Error("Not allowed by CORS: " + origin)); // deny
+      callback(new Error("Not allowed by CORS: " + origin)); // block request
     }
   },
-  credentials: true
-}));
+  credentials: true // allow cookies, authorization headers, etc.
+};
 
-// ✅ Handle Preflight Requests
-app.options("*", cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(new Error("Not allowed by CORS: " + origin));
-    }
-  },
-  credentials: true
-}));
-
-// ✅ Middlewares
+// ✅ Middleware
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
-// ✅ Health check route
+// ✅ Health Check Route
 app.get("/", (req, res) => {
   res.json({ message: "✅ Backend is Running!" });
 });
 
-// ✅ Register Routes
+// ✅ API Routes
 app.use("/auth", authRoutes);
 app.use("/workspace", workspaceRoutes);
 app.use("/tasks", taskRoutes);
 
-// ✅ Global error handler
+// ✅ Global Error Handler
 app.use((err, req, res, next) => {
   console.error("❌ Unhandled server error:", err.stack || err.message);
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-// ✅ Start Server
+// ✅ Start the Server
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
