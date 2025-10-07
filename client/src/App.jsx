@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import DashboardLayout from "./components/DahboardLayout";
 import Workspace from "./pages/Workspace";
 import TaskPage from "./pages/TaskPage";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
 
         {/* Protected Dashboard Routes */}
         <Route path="/workspace" element={<DashboardLayout />}>
-          <Route index element={<Workspace />} /> {/* Default workspace page */}
-          <Route path=":id/tasks" element={<TaskPage />} />
+          <Route index element={<Workspace />} />
+          <Route path=":workspaceId/tasks" element={<TaskPage />} />
+          <Route path=":workspaceId/chat" element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

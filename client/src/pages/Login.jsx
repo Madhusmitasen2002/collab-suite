@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "react-toastify";
-import API_BASE_URL from "../config"; 
+import API_BASE_URL from "../config";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -16,11 +16,12 @@ export default function Login() {
 
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  credentials: "include",
-  body: JSON.stringify({ email, password }),
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // include cookies
+        body: JSON.stringify({ email, password }),
+      });
+
       const data = await res.json();
 
       if (!res.ok || data.error) {
@@ -30,6 +31,7 @@ export default function Login() {
       }
 
       toast.success("✅ Login successful");
+      console.log("Redirecting to /workspace");
       navigate("/workspace");
     } catch (err) {
       setFormError(err.message || "Login failed");
@@ -40,18 +42,16 @@ export default function Login() {
   return (
     <div className="fixed inset-0 flex items-center justify-center min-h-screen 
                 bg-gradient-to-br from-indigo-200 via-white to-blue-200 p-4">
-  <div className="w-full max-w-sm sm:max-w-md bg-white/90 backdrop-blur-lg 
-                  rounded-2xl shadow-xl p-6 sm:p-8 
-                  transform transition-all duration-300 
-                  hover:scale-[1.02] hover:shadow-2xl">
+      <div className="w-full max-w-sm sm:max-w-md bg-white/90 backdrop-blur-lg 
+                      rounded-2xl shadow-xl p-6 sm:p-8 
+                      transform transition-all duration-300 
+                      hover:scale-[1.02] hover:shadow-2xl">
 
-        {/* Title */}
         <h2 className="text-3xl font-bold text-center text-indigo-700">
           Remote Work Suite
         </h2>
         <p className="mt-2 text-center text-gray-500">Welcome back! Please log in.</p>
 
-        {/* Form */}
         <form onSubmit={handleLogin} className="mt-6 space-y-5">
           {/* Email */}
           <div>
@@ -109,7 +109,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Don’t have an account?{" "}
           <a href="/register" className="text-indigo-600 hover:underline">
@@ -118,6 +117,5 @@ export default function Login() {
         </p>
       </div>
     </div>
-
   );
 }

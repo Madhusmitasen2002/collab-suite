@@ -10,42 +10,43 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setFormError("");
 
-  try {
-    const res = await fetch(`${API_BASE_URL}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // keep this to allow cookie
-      body: JSON.stringify({ name, email, password }),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormError("");
 
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // include cookies
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    if (!res.ok || data.error) {
-      setFormError(data.error || "Signup failed");
-      toast.error(data.error || "Signup failed");
-      return;
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        setFormError(data.error || "Signup failed");
+        toast.error(data.error || "Signup failed");
+        return;
+      }
+
+      toast.success("✅ Registration successful");
+      console.log("Redirecting to /login");
+      navigate("/workspace");
+    } catch (err) {
+      setFormError(err.message || "Signup failed");
+      toast.error(err.message || "Signup failed");
     }
-
-    // Cookie already set by server; proceed to dashboard
-    toast.success("✅ Registration successful");
-    navigate("/workspace");
-  } catch (err) {
-    setFormError(err.message || "Signup failed");
-    toast.error(err.message || "Signup failed");
-  }
-};
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center min-h-screen 
                 bg-gradient-to-br from-indigo-200 via-white to-blue-200 p-4">
-  <div className="w-full max-w-sm sm:max-w-md bg-white/90 backdrop-blur-lg 
-                  rounded-2xl shadow-xl p-6 sm:p-8 
-                  transform transition-all duration-300 
-                  hover:scale-[1.02] hover:shadow-2xl">
+      <div className="w-full max-w-sm sm:max-w-md bg-white/90 backdrop-blur-lg 
+                      rounded-2xl shadow-xl p-6 sm:p-8 
+                      transform transition-all duration-300 
+                      hover:scale-[1.02] hover:shadow-2xl">
 
         <h2 className="text-3xl font-bold text-center text-indigo-700">
           Remote Work Suite

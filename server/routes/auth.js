@@ -1,7 +1,8 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import pool from "../db.js"; // ensure this path is correct
+import pool from "../db.js"; 
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -111,6 +112,14 @@ router.get("/testdb", async (req, res) => {
     res.status(500).json({ error: "DB test failed" });
   }
 });
-
+// in routes/auth.js (add)
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT id, name, email FROM users WHERE id = $1", [req.user.id]);
+    res.json({ user: rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
 
 export default router;
