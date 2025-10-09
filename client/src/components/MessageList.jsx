@@ -7,16 +7,14 @@ export default function MessageList({ messages, currentUser }) {
           <div key={msg.id} className={`flex ${isMine ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-xs px-3 py-2 rounded-xl ${
-                isMine ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800"
+                isMine ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-900"
               }`}
             >
               {!isMine && (
-                <p className="text-xs font-semibold text-gray-700 mb-1">
-                  {msg.sender_name || "Anonymous"}
-                </p>
+                <p className="text-xs font-semibold mb-1">{msg.users?.name || "User"}</p>
               )}
               <p>{msg.content}</p>
-              <p className="text-[10px] text-gray-500 mt-1 text-right">
+              <p className="text-[10px] mt-1 text-right text-gray-500">
                 {new Date(msg.created_at).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",

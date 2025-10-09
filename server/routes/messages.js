@@ -3,15 +3,19 @@ import { supabase } from "../supabaseClient.js";
 
 const router = express.Router();
 
-// Get messages for a workspace
+// Get messages for a workspace with joined user name
 router.get("/:workspaceId", async (req, res) => {
   const { workspaceId } = req.params;
   try {
     const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("workspace_id", workspaceId)
-      .order("created_at", { ascending: true });
+  .from("messages")
+  .select(`
+    *,
+    users!sender_id ( name )
+  `)
+  .eq("workspace_id", workspaceId)
+  .order("created_at", { ascending: true });
+
 
     if (error) throw error;
     res.json(data);
@@ -20,14 +24,14 @@ router.get("/:workspaceId", async (req, res) => {
   }
 });
 
-// Save new message
+// Save new message (sender_name not needed here)
 router.post("/", async (req, res) => {
-  const { workspace_id, sender_id, sender_name, content } = req.body;
+  const { workspace_id, sender_id, content } = req.body;
 
   try {
     const { data, error } = await supabase
       .from("messages")
-      .insert([{ workspace_id, sender_id, sender_name,  content }])
+      .insert([{ workspace_id, sender_id, content }])
       .select()
       .single();
 

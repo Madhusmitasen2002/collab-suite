@@ -35,6 +35,14 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
 
 button {
   border-radius: 8px;

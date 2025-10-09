@@ -102,42 +102,42 @@ export default function DashboardLayout() {
             )}
 
             <Link
-              to="/workspace/docs"
+              to={`/workspace/${workspaceId}/docs`}
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded dark:text-gray-200"
             >
               Documents
             </Link>
           </div>
+{/* User info + Dark mode + Logout */}
+<div className="space-y-3 border-t pt-4 dark:border-gray-700">
+  {/* User email */}
+  <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+    <User className="h-4 w-4" />
+    <span>{user?.email || "User"}</span>
+  </div>
 
-          {/* User info + Dark mode + Logout */}
-          <div className="space-y-3 border-t pt-4 dark:border-gray-700">
-            {/* User email */}
-            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <User className="h-4 w-4" />
-              <span>{user?.email || "User"}</span>
-            </div>
+  {/* Dark Mode Toggle */}
+  <button
+    onClick={toggleDarkMode}
+    className="flex items-center gap-2 px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm dark:text-gray-300"
+  >
+    <Moon className="h-4 w-4" />
+    <span>Toggle Dark Mode</span>
+  </button>
 
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="flex items-center gap-2 px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-sm dark:text-gray-300"
-            >
-              <Moon className="h-4 w-4" />
-              <span>Toggle Dark Mode</span>
-            </button>
+  {/* ✅ Moved logout right below dark mode toggle */}
+  <button
+    onClick={async () => {
+      if (window.confirm("Are you sure you want to logout?")) {
+        await handleLogout();
+      }
+    }}
+    className="flex items-center gap-2 py-2 px-3 bg-red-600 text-black rounded hover:bg-red-700 text-sm"
+  >
+    <LogOut className="h-4 w-4" />
+    <span>Logout</span>
+  </button>
 
-            {/* Logout button */}
-            <button
-              onClick={async () => {
-                if (window.confirm("Are you sure you want to logout?")) {
-                  await handleLogout();
-                }
-              }}
-              className="flex items-center gap-2 py-2 px-3 bg-red-600 text-black rounded hover:bg-red-700 text-sm"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Logout</span>
-            </button>
           </div>
         </nav>
       </aside>
@@ -153,18 +153,40 @@ export default function DashboardLayout() {
       {/* Main content */}
       <div className="flex-1 flex flex-col md:ml-64">
         {/* Mobile top bar */}
-        <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow dark:shadow-black">
-          <div className="font-bold text-xl dark:text-white">RemoteDashboard</div>
-          <button
-            className="text-gray-700 dark:text-gray-300"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-label="Toggle sidebar"
-          >
-            ☰
-          </button>
-        </header>
+        {/* Mobile top bar */}
+<header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow dark:shadow-black">
+  <div className="font-bold text-xl dark:text-white">RemoteDashboard</div>
+
+  <div className="flex items-center gap-4">
+    {/* Logout button */}
+    <button
+      onClick={async () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+          await handleLogout();
+        }
+      }}
+      className="flex items-center gap-1 py-1 px-2 bg-red-600 text-black rounded hover:bg-red-700 text-sm"
+      aria-label="Logout"
+      title="Logout"
+    >
+      <LogOut className="h-4 w-4" />
+      <span>Logout</span>
+    </button>
+
+    {/* Sidebar toggle */}
+    <button
+      className="text-gray-700 dark:text-gray-300"
+      onClick={() => setSidebarOpen(!sidebarOpen)}
+      aria-label="Toggle sidebar"
+    >
+      ☰
+    </button>
+  </div>
+</header>
+
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
+          
         </main>
       </div>
     </div>

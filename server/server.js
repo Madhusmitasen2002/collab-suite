@@ -11,6 +11,7 @@ import authRoutes from "./routes/auth.js";
 import workspaceRoutes from "./routes/workspace.js";
 import taskRoutes from "./routes/tasks.js";
 import messageRoutes from "./routes/messages.js";
+import docsRoutes from "./routes/docs.js";
 
 dotenv.config();
 const app = express();
@@ -44,40 +45,54 @@ app.use("/auth", authRoutes);
 app.use("/workspace", workspaceRoutes);
 app.use("/tasks", taskRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/docs", docsRoutes);
 
 // --- SOCKET.IO LOGIC ---
 io.on("connection", (socket) => {
   console.log("🟢 User connected:", socket.id);
 
-  // Join workspace
   socket.on("joinWorkspace", (workspaceId) => {
     socket.join(workspaceId);
     console.log(`📂 User joined workspace ${workspaceId}`);
   });
-  // Handle typing indicator
-socket.on("typing", ({ workspaceId, username }) => {
-  socket.to(workspaceId).emit("userTyping", username);
-});
 
-  // Handle send message
+  socket.on("typing", ({ workspaceId, username }) => {
+    socket.to(workspaceId).emit("userTyping", username);
+  });
+
   socket.on("sendMessage", async (msg) => {
     try {
       const { workspace_id, sender_id, content } = msg;
 
-      // Save message in Supabase
-      const { data, error } = await supabase
+      // Insert message without sender_name
+      const { data: insertedMessage, error: insertError } = await supabase
         .from("messages")
         .insert([{ workspace_id, sender_id, content }])
         .select()
         .single();
 
-      if (error) {
-        console.error("❌ Supabase insert error:", error.message);
+      if (insertError) {
+        console.error("❌ Supabase insert error:", insertError.message);
         return;
       }
 
-      // Broadcast message to workspace
-      io.to(workspace_id).emit("newMessage", data);
+      // Fetch inserted message with joined user info
+      const { data: messageWithUser, error: fetchError } = await supabase
+        .from("messages")
+        .select(`
+          *,
+          users!inner(name)
+        `)
+        .eq("id", insertedMessage.id)
+        .single();
+
+      if (fetchError) {
+        console.error("❌ Supabase fetch message error:", fetchError.message);
+        return;
+      }
+
+      // Emit full message with user info
+      io.to(workspace_id).emit("newMessage", messageWithUser);
     } catch (err) {
       console.error("❌ Socket message error:", err);
     }

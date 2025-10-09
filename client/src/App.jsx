@@ -5,6 +5,8 @@ import DashboardLayout from "./components/DahboardLayout";
 import Workspace from "./pages/Workspace";
 import TaskPage from "./pages/TaskPage";
 import Chat from "./pages/Chat";
+import Docs from "./pages/Docs";
+import DocumentEditor from "./pages/DocumentEditor";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route index element={<Workspace />} />
           <Route path=":workspaceId/tasks" element={<TaskPage />} />
           <Route path=":workspaceId/chat" element={<Chat />} />
+          <Route path=":workspaceId/docs" element={<Docs />} />
+          <Route path=":workspaceId/docs/:docId" element={<DocumentEditor />} />
         </Route>
       </Routes>
     </BrowserRouter>
